@@ -20,31 +20,32 @@ class CronController extends Controller
         return $dom;
     }
 
-    //add job to file json
+    //add job to file json from itviec
     function addJob(){
         $html = $this->getDom("https://itviec.com/it-jobs");
         $result = array();
         foreach($html->find('.title a') as $element){
+            // dd($element);
             $url_detail = "https://itviec.com".$element->href;
             $html_detail = $this->getDom($url_detail);
+
             $job_title = trim($html_detail->find("h1.job_title", 0)->plaintext);
             $salary = trim($html_detail->find(".salary-text", 0)->plaintext);
             $skill = trim($html_detail->find(".tag-list", 0)->plaintext);
             $skill = preg_replace("/\s+/", ",", $skill);
-            $benefit = array();
-            foreach($html_detail->find(".culture_description li") as $des){
-                array_push($benefit, $des->plaintext);
+            $benefit = "";
+            foreach($html_detail->find(".culture_description ul") as $des){
+                $benefit.=$des;
             }
-
-            $description = array();
+            $description = '';
             foreach($html_detail->find(".description li") as $des){
-                array_push($description, $des->plaintext);
+                $description .= $des;
             }
 
-            $requirement = array();
+            $requirement = "";
 
             foreach($html_detail->find(".experience li") as $des){
-                array_push($requirement, $des->plaintext);
+                $requirement .= $des;
             }
             
             array_push($result,[
@@ -55,7 +56,7 @@ class CronController extends Controller
                 "description" => $description,
                 "requirement" => $requirement
             ]);
-            // dd($result);
+
         }
         print_r(count($result));
         // erase all data from file
@@ -80,10 +81,10 @@ class CronController extends Controller
             $outsourcing = trim($html_detail->find(".group-icon", 0)->plaintext);
             $address = trim($html_detail->find(".name-and-info span", 0)->plaintext);
 
-            $overview = array();
+            $overview = "";
             foreach($html_detail->find(".paragraph p") as $des){
                 if($des->plaintext != ""){
-                    array_push($overview, $des->plaintext);
+                    $overview.= $des;
                 }
             }
             array_push($result,[
@@ -102,5 +103,103 @@ class CronController extends Controller
         $fp = fopen('company.json', 'w');
         fwrite($fp, json_encode($result));
         fclose($fp);
+    }
+
+    function addJobFromTopDev(){
+        $html = $this->getDom("https://topdev.vn/it-jobs");
+        $result = array();
+        
+        foreach($html->find(".pagination a") as $page){
+            
+            $page_html = $this->getDom($page->href);
+            foreach($page_html->find('.bold-red a') as $element){
+                $url_detail = $element->href;
+                $page_html = $this->getDom($url_detail);
+                
+                $job_title = trim($page_html->find(".job-title", 0)->plaintext);
+                
+                $skill = "";
+                foreach($page_html->find(".tag-skill") as $ski){
+                    $skill.=$ski->plaintext.",";
+                }
+    
+                $salary = $page_html->find(".orange.text-lg", 0)->plaintext;
+                $benefit = "";
+                foreach($page_html->find(".benefit-name") as $ben){
+                    $benefit .= $ben;
+                }
+    
+                $description = "";
+                foreach($page_html->find("#job-description") as $des){
+                    $description .= $des;
+                }
+                $requirement = "";
+                foreach($page_html->find(".job-requirement-must-have.push-top-sm") as $re){
+                    $requirement .= $re;
+                }
+                
+                array_push($result,[
+                    "job_title" => $job_title,
+                    "salary" => $salary,
+                    "skill" => $skill,
+                    "benefit" => $benefit,
+                    "description" => $description,
+                    "requirement" => $requirement
+                ]);
+                
+            }
+            // break;
+        }
+        
+        //erase all data from file
+        $handle = fopen ("job-topdev.json", "w+");
+        fclose($handle);
+
+        $fp = fopen('job-topdev.json', 'w');
+        fwrite($fp, json_encode($result));
+        fclose($fp);
+        dd(count($result));
+    }
+
+    function addCompanyFromTopDev(){
+        $html = $this->getDom("https://topdev.vn/it-jobs");
+        $result = array();
+        
+        foreach($html->find(".pagination a") as $page){
+            
+            $page_html = $this->getDom($page->href);
+            foreach($page_html->find('.bold-red a') as $element){
+                $url_detail = $element->href;
+                $page_html = $this->getDom($url_detail);
+                $company_name = trim($page_html->find(".company-name", 0)->plaintext);
+                $logo = $page_html->find(".logo", 0)->href;
+                $employer = trim($page_html->find(".group-icon", 0));
+                $address = trim($page_html->find(".country-name", 0)->plaintext);
+    
+                $overview = "";
+                foreach($page_html->find(".des_full") as $ov){
+                    $overview .= $ov;
+                }
+                
+                array_push($result,[
+                    "company_name" => $company_name,
+                    "logo" => $logo,
+                    "employer" => $employer,
+                    "address" => $address,
+                    "overview" => $overview,
+                ]);
+                
+            }
+            // break;
+        }
+        
+        //erase all data from file
+        $handle = fopen ("company-topdev.json", "w+");
+        fclose($handle);
+
+        $fp = fopen('company-topdev.json', 'w');
+        fwrite($fp, json_encode($result));
+        fclose($fp);
+        dd(count($result));
     }
 }

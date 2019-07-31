@@ -61,11 +61,41 @@ class UserController extends Controller
 
     function login(Request $request){
         $validator = Validator::make($request->all(),[
-            "email" => "required|email",
-            "password" => "required|min:8"
+            "email" => "required",
+            "password" => "required"
         ]);
-        if(Auth::attemp(['email' => $request->input('email'), "password" => $request->input("password")])){
-            return redirect()->route('/admin');
+        if ($validator->fails()) {
+            return redirect()->route("get-login")
+                        ->withErrors($validator)
+                        ->withInput();
         }
+        if(Auth::attempt(['email' => $request->input('email'), "password" => $request->input("password")])){
+            return redirect()->route('dashboard');
+        }
+        return redirect()->back()->withErrors("Wrong email or pass");
+    }
+
+    function register(Request $request){
+        $validator = Validator::make($request->all(),[
+            "email" => "required|email|unique:users",
+            "name" => "required",
+            "password" => "required|min:8",
+            "c_password" => "required|same:password"
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route("register")
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $input = $request->all(); 
+        $input['password'] = bcrypt($request->input("password")); 
+        $user = User::create($input);
+        Auth::login($user);
+        return redirect()->route("dashboard");
+    }
+
+    function logout(){
+        Auth::logout();
+        return redirect()->route("login");
     }
 }

@@ -16,12 +16,12 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
             <li class="active">
-                <a href="#">
+                <a href="{{ route('dashboard') }}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li><a href="category"><i class="fa fa-circle-o text-red"></i> <span>Quan ly danh muc</span></a></li>
-            <li><a href="post"><i class="fa fa-circle-o text-yellow"></i> <span>Quan ly bai viet</span></a></li>
+            <li><a href="{{ route('category') }}"><i class="fa fa-circle-o text-red"></i> <span>Quan ly danh muc</span></a></li>
+            <li><a href="{{ route('post') }}"><i class="fa fa-circle-o text-yellow"></i> <span>Quan ly bai viet</span></a></li>
         </ul>
     </section>
     <!-- /.sidebar -->
