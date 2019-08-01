@@ -14,8 +14,8 @@ class AddColumnGoogleIdToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string("provider_id");
-            $table->string("provider");
+            $table->string("provider_id")->nullable();
+            $table->string("provider")->nullable();
         });
     }
 

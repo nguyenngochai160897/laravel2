@@ -18,7 +18,7 @@ class Category extends Model
     }
 
     function getCategory(){
-        return Category::find($this->id);
+        return Category::with("posts")->find($this->id);
     }
 
     function createCategory(){

@@ -1,6 +1,6 @@
 @extends("admin.layouts.default")
 
-@section("title", "post")
+@section("title", "category")
 
 @section("content")
 <div class="content-wrapper">

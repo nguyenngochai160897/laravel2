@@ -102,7 +102,6 @@ class CloneController extends Controller
                         "description" => $description
                     ]);
                 }
-                // else return;
 
                 
             }

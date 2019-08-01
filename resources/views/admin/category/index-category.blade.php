@@ -10,7 +10,7 @@
             Quản lý danh mục
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Dashboard</li>
         </ol>
     </section>
@@ -23,7 +23,7 @@
                     <div class="box-header with-border clearfix">
                         <h3 class="box-title pull-left">Danh sách danh mục</h3>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="add-category">
+                        <a class="btn btn-primary" href="{{ route('add-category') }}">
                                 <i class="fa fa-plus"></i> Add
                             </a>
                         </div>
@@ -53,7 +53,8 @@
                                     <td>{{ $category['name'] }}</td>
                                     <td>{{ count($category['posts']) }}</td>
                                     <td>
-                                        <a class="btn btn-info btn-sm" href="{{ route('edit-category', ['id'=> $category['id']]) }}"><i class="fa fa-edit"></i> Edit</a> | <a class="btn btn-danger btn-sm" href="{{  route('delete-category', ['id' => $category['id']]) }}"><i class="fa fa-trash"></i> Delete</a>
+                                        <a class="btn btn-info btn-sm" href="{{ route('edit-category', ['id'=> $category['id']]) }}"><i class="fa fa-edit"></i> Edit</a> | 
+                                            <form action="{{  route('delete-category', ['id' => $category['id']]) }}" method="post"> @csrf <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button></form>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -62,13 +63,13 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">
-                        <ul class="pagination pagination-sm no-margin pull-right">
+                        {{-- <ul class="pagination pagination-sm no-margin pull-right">
                             <li><a href="#">«</a></li>
                             <li><a href="#">1</a></li>
                             <li><a href="#">2</a></li>
                             <li><a href="#">3</a></li>
                             <li><a href="#">»</a></li>
-                        </ul>
+                        </ul> --}}
                     </div>
                     
                 </div>

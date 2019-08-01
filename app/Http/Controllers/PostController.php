@@ -41,7 +41,7 @@ class PostController extends Controller
     }
     function create(){
         $category = new Category;
-        return view("add-post")->with(
+        return view("admin.post.add-post")->with(
             "categories" , $category->getAllcategory()
         );
     }
@@ -70,7 +70,7 @@ class PostController extends Controller
         $post = new Post;
         $category = new Category;
         $post->id = $id;
-        return view("update-post")->with([
+        return view("admin.post.update-post")->with([
             'post'=> $post->getPost(), 
             "categories" => $category->getAllCategory(),]);
     }

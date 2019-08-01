@@ -40,18 +40,18 @@ Route::prefix('admin')->group(function () {
         return view("admin.dashboard.index");
     })->middleware("auth")->name("dashboard");
    
-    Route::prefix("category")->group(function(){
+    Route::group(['prefix' => 'category', 'middleware' => ['auth']], function(){
         Route::get("/", "CategoryController@index")->name("category");
-        Route::get("/add-category", "CategoryController@create");
+        Route::get("/add-category", "CategoryController@create")->name("create-category");
         Route::post("/add-category", "CategoryController@store")->name("add-category");
         Route::get("/update-category/{id}", "CategoryController@edit")->name("edit-category");
         Route::post("/update-category/{id}", "CategoryController@update")->name("update-category");
         Route::post("/delete-category/{id}", "CategoryController@destroy")->name("delete-category");
     });
 
-    Route::prefix("post")->group(function(){
+    Route::group(['prefix' => 'post', 'middleware' => ['auth']], function(){
         Route::get("/", "PostController@index")->name("post");
-        Route::get("/add-post", "PostController@create");
+        Route::get("/add-post", "PostController@create")->name("create-post");
         Route::post("/add-post", "PostController@store")->name("add-post");
         Route::get("/update-post/{id}", "PostController@edit")->name("edit-post");
         Route::post("/update-post/{id}", "PostController@update")->name("update-post");
@@ -69,9 +69,9 @@ Route::prefix('admin')->group(function () {
     Route::post("/logout", "UserController@logout")->name("logout");
 });
 
-Route::get("blog", function(){ return view("public.index");});
-Route::get("blog/{id}", function(){ return view("public.post-detail");});
-Route::get("category/{id}", function(){ return view("public.category-detail");});
+Route::get("blog", "PublicController@index");
+Route::get("blog/{id}", "PublicController@showPost")->name("blog-detail");
+Route::get("category/{id}", "PublicController@showCategory")->name("category-detail");
 
 
 // clone job from itviec.com

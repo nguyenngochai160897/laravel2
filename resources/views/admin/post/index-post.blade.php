@@ -10,7 +10,7 @@
             Quản lý bài viết
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Dashboard</li>
         </ol>
     </section>
@@ -61,7 +61,7 @@
                     <div class="box-header with-border clearfix">
                         <h3 class="box-title pull-left">Danh sách bài viết</h3>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="add-post">
+                        <a class="btn btn-primary" href="{{ route('create-post') }}">
                                 <i class="fa fa-plus"></i> Add
                             </a>
                         </div>
@@ -82,7 +82,7 @@
                                 </tr>
                                 @foreach($posts as $post)
                                 <tr>
-                                    <td>{{ $post['id']}}</td>
+                                    <td>{{ $post['id'] }}</td>
                                     <td>
                                         <a href="#"> {{ $post['title'] }}</a>
                                     </td>
@@ -103,7 +103,8 @@
                                     </td>
                                     <td>{{ date("d/m/Y H:i", strtotime($post['created_at'])) }}</td>
                                     <td>
-                                        <a class="btn btn-info btn-sm" href="{{ route('edit-post', ['id' => $post['id']]) }}"><i class="fa fa-edit"></i> Edit</a> | <a class="btn btn-danger btn-sm" href="{{ route('delete-post', ['id'=>$post['id']]) }}"><i class="fa fa-trash"></i> Delete</a>
+                                        <a class="btn btn-info btn-sm" href="{{ route('edit-post', ['id' => $post['id']]) }}"><i class="fa fa-edit"></i> Edit</a> | 
+                                        <form action="{{  route('delete-post', ['id' => $post['id']]) }}" method="post"> @csrf <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button></form>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -113,13 +114,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <li><a href="#">«</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">»</a></li>
-                        </ul>
+                        
                         {{ $posts->links() }}
                     </div>
                 </div>
